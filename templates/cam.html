@@ -1,0 +1,39 @@
+<html>
+<head>
+  <title>piserv - camera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<style>
+
+body {
+  margin: 0px;
+  line-height:  1.5;
+}
+
+img {
+  height: 100%;
+  max-width: 100%;
+}
+
+</style>
+<script type="text/javascript">
+
+function change_image(num) {
+  var im = document.createElement("img");
+  im.setAttribute("src", "/cam/now.jpeg");
+  im.onload = function () {
+    var div = document.getElementById("i");
+    var image = div.getElementsByTagName("img");
+    div.removeChild(image[0]);
+    div.appendChild(im);
+    setTimeout(change_image, 5 * 1000);
+  };
+}
+
+setTimeout(change_image, 5 * 1000);
+
+</script>
+</head>
+<body bgcolor="white" text="black">
+<div id="i"><img src="/cam/now.jpeg"></div>
+</body>
+</html>

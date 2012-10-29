@@ -1,0 +1,34 @@
+<html>
+<head>
+  <title>Welcome to piserv</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<style>
+
+body {
+  padding: 10px;
+  line-height:  1.5;
+}
+
+</style>
+</head>
+<body bgcolor="white" text="black">
+{% if nas_up %}
+  <span style='color:green'>nas up</span>
+{% else %}
+  <span style='color:red'>nas down</span>
+{% endif %}
+ - <a href="/wake/nas">Wake NAS</a><br />
+<br />
+<a id="couch" href="http://wien.furidamu.org:5050">CouchPotato - Movies</a><br />
+<a id="sick" href="http://wien.furidamu.org:8081">SickBeard - TV Shows</a><br />
+<a id="head" href="http://wien.furidamu.org:8181">Headphones - Music</a><br />
+<br />
+<a id="sab" href="http://wien.furidamu.org:8080">Sabnzbd+ - Usenet</a><br />
+<a id="trans" href="http://wien.furidamu.org:9091">Transmission - Torrents</a><br />
+<br />
+<a id="tomat" href="http://wien.furidamu.org:8180">Tomato - Router</a><br />
+<br />
+<a href="http://wien.furidamu.org/receiver">A/V Receiver</a><br />
+<br />
+</body>
+</html>

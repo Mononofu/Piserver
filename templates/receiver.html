@@ -1,0 +1,57 @@
+<html>
+<head>
+  <title>piserv - receiver</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<style>
+
+input {
+  width: 300px;
+  max-width: 100%;
+}
+
+li {
+  padding: 5px;
+}
+
+body {
+  padding: 10px;
+}
+
+</style>
+<script type="text/javascript">
+function onVolumeChange() {
+  var volume = document.getElementById("volume").value;
+
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    document.getElementById("volume-text").innerHTML = volume;
+  }
+  xhr.open('GET', "/receiver/vol/" + volume, false);
+  xhr.send();
+}
+
+</script>
+</head>
+<body bgcolor="white" text="black">
+{% if receiver_on %}
+  <span style='color:green'>receiver is on</span> 
+ - <a href="/receiver/off">turn if off</a><br />
+{% else %}
+  <span style='color:red'>receiver is off</span> 
+ - <a href="/receiver/on">turn it on</a><br />
+{% endif %}
+<br />
+playing on {{ device }} with <span id="volume-text">{{ volume }}</span> dB, switch to:
+<ul>
+  <li><a href="/receiver/tuner">Tuner</a></li>
+  <li><a href="/receiver/pc">PC</a></li>
+  <li><a href="/receiver/tv">TV</a></li>
+  <li><a href="/receiver/pi">Raspberry PI</a></li>
+  <li><a href="/receiver/aux">AUX</a></li>
+</ul>
+
+<input type="range" id="volume" min="-60" max="0" value="{{ volume }}" onChange="javascript:onVolumeChange()">
+<br /><br />
+<a href="/">Back to root</a>
+</body>
+</html>
