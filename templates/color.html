@@ -14,7 +14,7 @@
     if(color != last_color) {
       last_color = color;
 
-      $('#color').val(color.hex);
+      $('#color').text(color.hex);
 
       var xhr = new XMLHttpRequest();
       xhr.open('GET', "" + color.hex.substring(1) + "/", false);
@@ -46,19 +46,22 @@
 <body>
 
 
-<div><a href="/">Back to root</a> <label for="color">Color:</label><input type="text" id="color" name="color" value="#{{ color }}" /><a href="reset">Reset tty</a><div>
+<div><a href="/">Back to root</a>&nbsp;&nbsp;&nbsp;&nbsp;<label for="color"> Color: </label><span id="color" >#{{ color }}</span><div>
 
 <div id="wheel"></div>
 <a href="ffffff"><div class="colorbtn" style="background: #fff"></div></a>
 <a href="000000"><div class="colorbtn" style="background: #000"></div></a>
 
 <a href="ff0000"><div class="colorbtn" style="background: #f00"></div></a>
-<a href="00ff00"><div class="colorbtn" style="background: #0f0"></div></a>
+<a href="76ff00"><div class="colorbtn" style="background: #76ff00"></div></a>
 <a href="0000ff"><div class="colorbtn" style="background: #00f"></div></a>
 
 <a href="ffff00"><div class="colorbtn" style="background: #ff0"></div></a>
-<a href="00ffff"><div class="colorbtn" style="background: #0ff"></div></a>
+<a href="00caff"><div class="colorbtn" style="background: #00caff"></div></a>
 <a href="ff00ff"><div class="colorbtn" style="background: #f0f"></div></a>
+
+<a href="ff7600"><div class="colorbtn" style="background: #ff7600"></div></a>
+
 
 
 <br /><br />
