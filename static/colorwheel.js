@@ -48,6 +48,7 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
     create_bs_square();
     create_hue_ring();
     hue_ring.cursor = cursor_create(tri_size);
+    bs_square.cursor = cursor_create(tri_size*0.5);
     events_setup();
     parent.css({height:size+"px", width:size+"px"});
     disable_select(parent);
@@ -77,7 +78,7 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
       if(this.value.match(/^#([0-9A-F]){3}$|^#([0-9A-F]){6}$/img)){
         set_color(this.value);
         update_color(true);
-		run_onchange_event();
+    run_onchange_event();
       }
     });
     set_color(target.value);
@@ -104,7 +105,13 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
     if(drag_target == hue_ring){
       set_hue_cursor(x,y);
       update_color();
-	  run_onchange_event();
+    run_onchange_event();
+      return true;
+    }
+    if(drag_target == bs_square){
+      set_bs_cursor(x,y);
+      update_color();
+    run_onchange_event();
       return true;
     }
   }
@@ -121,7 +128,7 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
     $(document).unbind("mouseup",stop_drag);
     $(document).unbind("mousemove",drag);
     drag_callbacks[1](current_color);
-	run_onchange_event();
+  run_onchange_event();
   }
 
   function event_drag_stop(event,o){
@@ -131,6 +138,7 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
 
   function events_setup(){
     $([hue_ring.event.node,hue_ring.cursor[0].node]).mousedown(function(e){start_drag(e,hue_ring);});
+    $([bs_square.b.node, bs_square.cursor[0].node]).mousedown(function(e){start_drag(e,bs_square);});
   }
 
   function cursor_create(size){
@@ -142,6 +150,17 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
     set[0].node.style.cursor = "crosshair";
 
     return set;
+  }
+
+  function set_bs_cursor(x,y){
+    x = x+center;
+    y = y+center;
+    if(x < sdim.x) x = sdim.x;
+    if(x > sdim.x+sdim.l) x = sdim.x+sdim.l;
+    if(y < sdim.y) y = sdim.y;
+    if(y > sdim.y+sdim.l) y = sdim.y + sdim.l;
+
+    bs_square.cursor.attr({cx:x, cy:y}).transform("t0,0");
   }
 
 
@@ -166,7 +185,9 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
     var temp = canvas.rect(1,1,1,1).attr({fill:value}),
         hsb = canvas.raphael.rgb2hsb(temp.attr("fill"));
 
-    
+    set_bs_cursor(
+      (0-sdim.l/2) + (sdim.l*hsb.s),
+      sdim.l/2 - (sdim.l*hsb.b));
     set_hue_cursor((360*(hsb.h))-90);
     temp.remove();
     return public_methods();
@@ -174,13 +195,15 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
 
   // Could optimize this method
   function update_color(dont_replace_input_value){
-    var hsb = {
-          b: 1.,
-          s: 1.,
+    var x = bs_square.cursor.items[0].attr("cx"),
+        y = bs_square.cursor.items[0].attr("cy"),
+        hsb = {
+          b: 1-(y-sdim.y)/sdim.l,
+          s: 1,
           h: hue()
         };
 
-    current_color = Raphael.hsb2rgb(hsb.h, hsb.s, hsb.b);
+    current_color = Raphael.hsb2rgb(hsb.h, hsb.s,hsb.b);
 
     if(input_target){
       var c = current_color.hex;
@@ -226,11 +249,12 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
     box = [sdim.x, sdim.y, sdim.l, sdim.l];
 
     bs_square.h = canvas.rect.apply(canvas, box).attr({
-      stroke:"#EEE", gradient: "0-#FFF-#FFF", opacity:1});
+      stroke:"#EEE", gradient: "0-#FFF-#000", opacity:1});
     bs_square.s = canvas.rect.apply(canvas, box).attr({
-      stroke:null, gradient: "90-#FFF-#FFF", opacity:0});
+      stroke:null, gradient: "0-#FFF-#FFF", opacity:0});
     bs_square.b = canvas.rect.apply(canvas, box).attr({
-      stroke:null, gradient: "#FFF-#FFF-#FFF", opacity:0});
+      stroke:null, gradient: "90-#000-#FFF", opacity:0});
+    bs_square.b.node.style.cursor = "crosshair";
   }
 
   function hue_segement_shape(){
@@ -276,7 +300,7 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
   }
 
   function run_onchange_event(){
-	if (change_callback != undefined){
+  if (change_callback != undefined){
       change_callback(current_color);
     }
   }
