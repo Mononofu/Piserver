@@ -7,28 +7,62 @@
  <script type="text/javascript" src="/static/raphael.js"></script>
  <script type="text/javascript" src="/static/colorwheel.js"></script>
  <script type="text/javascript" charset="utf-8">
- function callback(color) {
-  $('#color').val(color.hex);
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', "" + color.hex.substring(1), false);
-  xhr.send();
- }
+  var last_color = "";
+
+  function callback(color) {
+    if(color != last_color) {
+      last_color = color;
+
+      $('#color').val(color.hex);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', "" + color.hex.substring(1) + "/", false);
+      xhr.send();
+    }
+  }
 
   $(document).ready(function() {
-    var cw = Raphael.colorwheel($("#wheel")[0],600, 60).color("#00F");
+    var cw = Raphael.colorwheel($("#wheel")[0],580, 60).color("#{{ color }}");
     cw.onchange(callback)
   });
  </script>
+ <style type="text/css">
+ div {
+  margin: 10px;
+ }
+ #wheel {
+  float: left;
+ }
+ .colorbtn {
+    border: 1px solid black;
+    margin: 5px;
+    width: 200px;
+    height: 50px;
+    float: left;
+ }
+ </style>
 </head>
 <body>
 
 
-<form action="" style="width: 400px;">
-  <div class="form-item"><label for="color">Color:</label><input type="text" id="color" name="color" value="#123456" /></div><div id="picker"></div>
-</form>
+<div><a href="/">Back to root</a> <label for="color">Color:</label><input type="text" id="color" name="color" value="#{{ color }}" /><a href="reset">Reset tty</a><div>
 
 <div id="wheel"></div>
+<a href="ffffff"><div class="colorbtn" style="background: #fff"></div></a>
+<a href="000000"><div class="colorbtn" style="background: #000"></div></a>
+
+<a href="ff0000"><div class="colorbtn" style="background: #f00"></div></a>
+<a href="00ff00"><div class="colorbtn" style="background: #0f0"></div></a>
+<a href="0000ff"><div class="colorbtn" style="background: #00f"></div></a>
+
+<a href="ffff00"><div class="colorbtn" style="background: #ff0"></div></a>
+<a href="00ffff"><div class="colorbtn" style="background: #0ff"></div></a>
+<a href="ff00ff"><div class="colorbtn" style="background: #f0f"></div></a>
+
+
+<br /><br />
+
 
 
 </body>

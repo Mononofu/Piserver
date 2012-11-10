@@ -226,9 +226,9 @@ Raphael.colorwheel = function(target, color_wheel_size, no_segments){
     box = [sdim.x, sdim.y, sdim.l, sdim.l];
 
     bs_square.h = canvas.rect.apply(canvas, box).attr({
-      stroke:"#EEE", gradient: "#FFF-#FFF-#FFF", opacity:1});
+      stroke:"#EEE", gradient: "0-#FFF-#FFF", opacity:1});
     bs_square.s = canvas.rect.apply(canvas, box).attr({
-      stroke:null, gradient: "#FFF-#FFF-#FFF", opacity:0});
+      stroke:null, gradient: "90-#FFF-#FFF", opacity:0});
     bs_square.b = canvas.rect.apply(canvas, box).attr({
       stroke:null, gradient: "#FFF-#FFF-#FFF", opacity:0});
   }

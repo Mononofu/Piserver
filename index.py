@@ -117,9 +117,20 @@ class ReceiverView(FlaskView):
 
 class ColorView(FlaskView):
   def index(self):
-    return render_template('color.html')
+    return render_template('color.html', color=current_color)
+
+  @route("/reset")
+  def reset(self):
+    global ser
+    ser.close()
+    time.sleep(1)
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0)
+    return redirect('/color')
+
 
   def get(self, id):
+    global current_color
+    current_color = id
     red = id[0:2]
     green = id[4:6]
     blue = id[2:4] 
@@ -127,13 +138,13 @@ class ColorView(FlaskView):
     msg = chr(int(red, 16)) + chr(int(green, 16)) + chr(int(blue, 16))
 
     try:
-      ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
       ser.write(msg.replace('\x80', '\x81') + '\x80')
-      ser.close()
+      ser.flush()
+      ser.readlines()
     except:
       return "failed to set color"
 
-    return "set to color " + id
+    return redirect('/color')
 
 
 OverView.register(app, route_base='/')
@@ -142,5 +153,10 @@ ReceiverView.register(app)
 PingView.register(app)
 ColorView.register(app)
 
+ser = None
+current_color = "f00"
+
 if __name__ == "__main__":
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0)
     app.run(host='0.0.0.0')
+    ser.close()
