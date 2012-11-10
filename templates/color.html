@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+ <title>Farbtastic</title>
+ <script type="text/javascript" src="/static/jquery.js"></script>
+ <script type="text/javascript" src="/static/raphael.js"></script>
+ <script type="text/javascript" src="/static/colorwheel.js"></script>
+ <script type="text/javascript" charset="utf-8">
+ function callback(color) {
+  $('#color').val(color.hex);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', "" + color.hex.substring(1), false);
+  xhr.send();
+ }
+
+  $(document).ready(function() {
+    var cw = Raphael.colorwheel($("#wheel")[0],600, 60).color("#00F");
+    cw.onchange(callback)
+  });
+ </script>
+</head>
+<body>
+
+
+<form action="" style="width: 400px;">
+  <div class="form-item"><label for="color">Color:</label><input type="text" id="color" name="color" value="#123456" /></div><div id="picker"></div>
+</form>
+
+<div id="wheel"></div>
+
+
+</body>
+</html>

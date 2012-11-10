@@ -2,6 +2,7 @@ from functools import wraps
 import commands
 import sqlite3
 import time
+import serial
 from flask import Flask, render_template, redirect, Response, request
 from contextlib import closing
 from remote import Remote
@@ -114,11 +115,32 @@ class ReceiverView(FlaskView):
         time.sleep(0.2)
         return redirect('/receiver')
 
+class ColorView(FlaskView):
+  def index(self):
+    return render_template('color.html')
+
+  def get(self, id):
+    red = id[0:2]
+    green = id[4:6]
+    blue = id[2:4] 
+
+    msg = chr(int(red, 16)) + chr(int(green, 16)) + chr(int(blue, 16))
+
+    try:
+      ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+      ser.write(msg.replace('\x80', '\x81') + '\x80')
+      ser.close()
+    except:
+      return "failed to set color"
+
+    return "set to color " + id
+
 
 OverView.register(app, route_base='/')
 NasView.register(app)
 ReceiverView.register(app)
 PingView.register(app)
+ColorView.register(app)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
